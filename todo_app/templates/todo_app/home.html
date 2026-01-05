@@ -1,24 +1,84 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Django To-Do</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django Task Manager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        body {
+            background-color: #f0f2f5;
+        }
+        .container {
+            max-width: 600px;
+            margin-top: 50px;
+        }
+        .card {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border: none;
+            border-radius: 12px;
+        }
+        .task-item {
+            transition: background-color 0.2s;
+        }
+        .task-item:hover {
+            background-color: #f8f9fa;
+        }
+        .delete-btn {
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+        .task-item:hover .delete-btn {
+            opacity: 1;
+        }
+    </style>
 </head>
 <body>
-    <h1>My To-Do List</h1>
 
-    <form method="POST">
-        {% csrf_token %}
-        <input type="text" name="task" placeholder="New Task...">
-        <button type="submit">Add</button>
-    </form>
+<div class="container">
+    <div class="card">
+        <div class="card-body p-5">
+            <h2 class="text-center mb-4 text-primary">
+                <i class="fas fa-check-double me-2"></i>My To-Do List
+            </h2>
 
-    <ul>
-        {% for task in tasks %}
-            <li>
-                {{ task.title }} 
-                <a href="{% url 'delete_task' task.id %}">[Delete]</a>
-            </li>
-        {% endfor %}
-    </ul>
+            <form method="POST" class="d-flex gap-2 mb-4">
+                {% csrf_token %}
+                <input type="text" name="task" class="form-control form-control-lg" placeholder="What needs to be done?" required autocomplete="off">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </form>
+
+            <ul class="list-group list-group-flush">
+                {% for task in tasks %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center py-3 px-2 border-bottom task-item">
+                        <span class="fs-5 text-dark">
+                            {{ task.title }}
+                        </span>
+                        
+                        <a href="{% url 'delete_task' task.id %}" class="btn btn-outline-danger btn-sm delete-btn" title="Delete Task">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
+                    </li>
+                {% empty %}
+                    <div class="text-center py-5 text-muted">
+                        <i class="fas fa-clipboard-list fa-3x mb-3"></i>
+                        <p>No tasks yet. Add one above!</p>
+                    </div>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    
+    <div class="text-center mt-3 text-muted" style="font-size: 0.8rem;">
+        Built with Django & Bootstrap
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
